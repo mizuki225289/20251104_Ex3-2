@@ -24,7 +24,7 @@ int main(void) {
     read_data(M, alpha, beta, f, l);
 
     int boundary_type_in0, boundary_type_inL;
-    double p0 = 0, pL = 0, gamma0 = 0, gammaL = 0, q0 = 0, qL = 0;
+    std::complex <double> p0, pL, gamma0, gammaL, q0, qL;
     read_boundary(&boundary_type_in0, &p0, &gamma0, &q0);
     read_boundary(&boundary_type_inL, &pL, &gammaL, &qL);
 
@@ -52,9 +52,9 @@ int main(void) {
         offdiagonal[i] = -alpha[i] / l[i] + beta[i] * l[i] / 6.0;
     }
 
-    for(int i=0; i < N; i++) {
-        std::cout << i << " " << diagonal[i] << " " << offdiagonal[i] << " " << righthand[i] << std::endl;
-    }
+    // for(int i=0; i < N; i++) {
+    //     std::cout << i << " " << diagonal[i] << " " << offdiagonal[i] << " " << righthand[i] << std::endl;
+    // }
     
     /*境界条件適用 at x=0 */
     if(boundary_type_in0 == 1) {
@@ -80,9 +80,11 @@ int main(void) {
     std::complex <double> answer[N] = {};
     solve(&N, diagonal, offdiagonal, righthand, answer);
 
-    std::ofstream ofs("result.dat");
+    std::ofstream ofs("./output/result.dat");
+    double x = 0.0;
     for(int i=0; i < N; i++) {
-        ofs << i << " " << answer[i] << std::endl;
+        ofs << x << " " << real(answer[i]) << " " << imag(answer[i]) << std::endl;
+        x += l[i];
     }
     ofs.close();
 

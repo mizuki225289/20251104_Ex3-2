@@ -31,7 +31,7 @@ void read_data(
 
 void read_boundary(
     int *type,
-    double *p, double *gamma, double *q
+    std::complex <double> *p, std::complex <double> *gamma, std::complex <double> *q
 ) {
     std::cin >> *type;
     if(*type == 1) { //Dirichlet

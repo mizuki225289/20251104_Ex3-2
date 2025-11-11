@@ -9,7 +9,7 @@ void read_data(
 );
 void read_boundary(
     int *type,
-    double *p, double *gamma, double *q
+    std::complex <double> *p, std::complex <double> *gamma, std::complex <double> *q
 );
 
 //output_datafile
@@ -20,6 +20,6 @@ void output_data(
     std::complex <double> *f, double *l
 );
 void output_boundary(
-    int *boundary_type_in0, double *p0, double *gamma0, double *q0,
-    int *boundary_type_inL, double *pL, double *gammaL, double *qL
+    int *boundary_type_in0, std::complex <double> *p0, std::complex <double> *gamma0, std::complex <double> *q0,
+    int *boundary_type_inL, std::complex <double> *pL, std::complex <double> *gammaL, std::complex <double> *qL
 );

@@ -20,8 +20,8 @@ void output_data(
 }
 
 void output_boundary(
-    int *boundary_type_in0, double *p0, double *gamma0, double *q0,
-    int *boundary_type_inL, double *pL, double *gammaL, double *qL
+    int *boundary_type_in0, std::complex <double> *p0, std::complex <double> *gamma0, std::complex <double> *q0,
+    int *boundary_type_inL, std::complex <double> *pL, std::complex <double> *gammaL, std::complex <double> *qL
 ) {
     std::cout << "x = 0" << std::endl;
     std::cout << *boundary_type_in0 << " " << *p0 << " " << *gamma0 << " " << *q0 << std::endl;

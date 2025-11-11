@@ -1,0 +1,9 @@
+./input
+./output
+*.dat
+*.exe
+main
+solve
+read
+test
+makedat
