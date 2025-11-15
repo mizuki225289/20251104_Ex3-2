@@ -30,7 +30,7 @@ int main(void) {
 
     /*データを書き出させて確認*/
     output_M(&M);
-    output_data(M, alpha, beta, f, l);
+    // output_data(M, alpha, beta, f, l);
     output_boundary(
         &boundary_type_in0, &p0, &gamma0, &q0,
         &boundary_type_inL, &pL, &gammaL, &qL
@@ -51,12 +51,23 @@ int main(void) {
     for(int i=0; i < N-2; i++) {
         offdiagonal[i] = -alpha[i] / l[i] + beta[i] * l[i] / 6.0;
     }
+    
+    /*境界条件適用 x=L*/
+    if(boundary_type_inL == 1) {
+        diagonal[N-1] = 1.0;
+        righthand[N-1] = pL;
+        righthand[N-2] = righthand[N-2] - offdiagonal[N-3] * pL;
+        offdiagonal[N-2] = 0;
+    } else if(boundary_type_inL == 3) {
+        diagonal[M] = alpha[M-1] / l[M-1] + beta[M-1] * l[M-1] / 3.0 + gammaL;
+        righthand[M] = f[M-1] * l[M-1] / 2.0 + qL;
+    }
 
     // for(int i=0; i < N; i++) {
     //     std::cout << i << " " << diagonal[i] << " " << offdiagonal[i] << " " << righthand[i] << std::endl;
     // }
-    
-    /*境界条件適用 at x=0 */
+
+    /*境界条件適用 x=0*/
     if(boundary_type_in0 == 1) {
         diagonal[0] = 1.0;
         righthand[0] = p0;
@@ -67,20 +78,10 @@ int main(void) {
         righthand[0] = righthand[0] + q0;
     }
 
-    if(boundary_type_inL == 1) {
-        diagonal[N-1] = 1.0;
-        righthand[N-1] = pL;
-        righthand[N-2] = righthand[N-2] - offdiagonal[N-3] * pL;
-        offdiagonal[N-2] = 0;
-    } else if(boundary_type_inL == 3) {
-        diagonal[N-1] = diagonal[N-1] + gammaL;
-        righthand[N-1] = righthand[N-1] + qL;
-    }
-
     std::complex <double> answer[N] = {};
     solve(&N, diagonal, offdiagonal, righthand, answer);
 
-    std::ofstream ofs("./output/result.dat");
+    std::ofstream ofs("result.dat");
     double x = 0.0;
     for(int i=0; i < N; i++) {
         ofs << x << " " << real(answer[i]) << " " << imag(answer[i]) << std::endl;

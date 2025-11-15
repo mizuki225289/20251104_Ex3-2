@@ -8,10 +8,16 @@ void solve ( //ガウスの消去法
     std::complex <double> *righthand,
     std::complex <double> *answer
 ) {
+
+    std::cout << 0 << " " << diagonal[0] << " " << offdiagonal[0] << " " << righthand[0] << std::endl;
+    std::cout << 100 << " " << diagonal[100] << " " << righthand[100] << std::endl;
+
     for(int i=1; i < *N; i++) {
         diagonal[i] = diagonal[i] - offdiagonal[i-1] * offdiagonal[i-1] / diagonal[i-1];
         righthand[i] = righthand[i] - offdiagonal[i-1] * righthand[i-1] / diagonal[i-1];
     }
+
+    std::cout << 100 << " " << diagonal[100] << " " << righthand[100] << std::endl;
 
     answer[*N-1] = righthand[*N-1] / diagonal[*N-1];
 
