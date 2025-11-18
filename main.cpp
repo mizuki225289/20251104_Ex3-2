@@ -38,17 +38,17 @@ int main(void) {
 
     int N = M+1;
     /*読み込んだデータから対角行列など作成*/
-    std::complex <double> diagonal[N] = {}, offdiagonal[N-1] = {}, righthand[N] = {};
+    std::complex <double> diagonal[M+1] = {}, offdiagonal[M] = {}, righthand[M+1] = {};
     diagonal[0] = alpha[0] / l[0] + beta[0] * l[0] / 3.0;
-    diagonal[N-1] = alpha[M-1] / l[M-1] + beta[M-1] * l[M-1] / 3.0;
+    diagonal[M] = alpha[M-1] / l[M-1] + beta[M-1] * l[M-1] / 3.0;
     righthand[0] = f[0] * l[0] / 2.0;
-    righthand[N-1] = f[M-1] * l[M-1] / 2.0;
-    for(int i=1; i < N-1; i++) {
+    righthand[M] = f[M-1] * l[M-1] / 2.0;
+    for(int i=1; i < M; i++) {
         diagonal[i] = alpha[i-1] / l[i-1] + beta[i-1] * l[i-1] / 3.0
                     + alpha[i] / l[i] + beta[i] * l[i] / 3.0;
         righthand[i] = f[i-1] * l[i-1] / 2.0 + f[i] * l[i] / 2.0;
     }
-    for(int i=0; i < N-2; i++) {
+    for(int i=0; i < M; i++) {
         offdiagonal[i] = -alpha[i] / l[i] + beta[i] * l[i] / 6.0;
     }
     
@@ -78,6 +78,11 @@ int main(void) {
         righthand[0] = righthand[0] + q0;
     }
 
+    std::cout << "diagonal etc\n";
+    for(int i=0; i < M+1; i++) {
+        std::cout << i << " " << diagonal[i] << " " << offdiagonal[i] << " " << righthand[i] << std::endl;
+    }
+
     std::complex <double> answer[N] = {};
     solve(&N, diagonal, offdiagonal, righthand, answer);
 
@@ -88,6 +93,20 @@ int main(void) {
         x += l[i];
     }
     ofs.close();
+
+    double L = 5.0;
+    double k0 = 2.0 * M_PI / L;
+    std::complex <double> zj (0.0, 1.0); /*()はコンストラクタ*/
+
+    /* 反射係数表示*/
+    std::complex <double> ReflectionCoef;
+    double theta_deg, theta;
+    // std::cout << "theta_deg > " << std::endl;
+    // std::cin >> theta_deg;
+    theta_deg = 30;
+    theta = theta_deg * M_PI / 180.0;
+    ReflectionCoef = (answer[M-1] - exp(zj * k0 * L * cos(theta))) / exp(-zj * k0 * L * cos(theta));
+    std::cout << "R = " << ReflectionCoef << " " << abs(ReflectionCoef) << std::endl;
 
     return 0;
 }
