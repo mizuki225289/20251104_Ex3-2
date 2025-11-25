@@ -95,7 +95,8 @@ int main(void) {
     ofs.close();
 
     double L = 5.0;
-    double k0 = 2.0 * M_PI / L;
+    double lambda = 1.0;
+    double k0 = 2.0 * M_PI / lambda;
     std::complex <double> zj (0.0, 1.0); /*()はコンストラクタ*/
 
     /* 反射係数表示*/
@@ -103,9 +104,11 @@ int main(void) {
     double theta_deg, theta;
     // std::cout << "theta_deg > " << std::endl;
     // std::cin >> theta_deg;
-    theta_deg = 30;
+    theta_deg = 60.0;
+    // std::cout << "theta > " << std::endl;
+    // std::cin >> theta_deg;
     theta = theta_deg * M_PI / 180.0;
-    ReflectionCoef = (answer[M-1] - exp(zj * k0 * L * cos(theta))) / exp(-zj * k0 * L * cos(theta));
+    ReflectionCoef = (answer[M] - exp(zj * k0 * L * cos(theta))) / exp(-zj * k0 * L * cos(theta));
     std::cout << "R = " << ReflectionCoef << " " << abs(ReflectionCoef) << std::endl;
 
     return 0;
