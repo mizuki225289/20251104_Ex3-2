@@ -6,14 +6,16 @@
 
 std::complex <double> zj (0.0, 1.0); /*()はコンストラクタ*/
 
-std::complex <double> MU_r = std::complex <double> (2.0, -0.1);
+// std::complex <double> MU_r = std::complex <double> (2.0, -0.1);
+std::complex <double> MU_r (2.0, -0.1);
 
 double L = 5.0;
 double lambda = 1.0;
 double k0 = 2.0 * M_PI / lambda;
 
 std::complex <double> EPS_r(double x) {
-    return 4.0 + (2.0 - 0.1 * zj) * (1.0 - x / L) * (1.0 - x / L);
+    // return 4.0 + (2.0 - 0.1 * zj) * (1.0 - x / L) * (1.0 - x / L);
+    return 4.0 - 0.1 * zj;
 }
 
 std::complex <double> alpha = 1.0 / MU_r;

@@ -1,10 +1,7 @@
 #include <iostream>
-#include <cmath>
-#include <complex>
 #include <fstream>
-// #include <sstream>
 #include <string>
-#include "head.h"
+#include <cmath>
 
 void solve ( //ガウスの消去法
     int *N, //対角成分の個数
@@ -14,7 +11,7 @@ void solve ( //ガウスの消去法
     std::complex <double> *righthand
 );
 
-int main(void) {
+std::complex <double> getR(void) {
     /*mainで用意した配列にデータを読み込ませる*/
     int M;
     read_M(&M);
@@ -29,12 +26,12 @@ int main(void) {
     read_boundary(&boundary_type_inL, &pL, &gammaL, &qL);
 
     /*データを書き出させて確認*/
-    output_M(&M);
+    // output_M(&M);
     // output_data(M, alpha, beta, f, l);
-    output_boundary(
-        &boundary_type_in0, &p0, &gamma0, &q0,
-        &boundary_type_inL, &pL, &gammaL, &qL
-    );
+    // output_boundary(
+    //     &boundary_type_in0, &p0, &gamma0, &q0,
+    //     &boundary_type_inL, &pL, &gammaL, &qL
+    // );
 
     int N = M+1;
     /*読み込んだデータから対角行列など作成*/
@@ -104,12 +101,64 @@ int main(void) {
     double theta_deg, theta;
     // std::cout << "theta_deg > " << std::endl;
     // std::cin >> theta_deg;
-    theta_deg = 90.0;
+    theta_deg = 60.0;
     // std::cout << "theta > " << std::endl;
     // std::cin >> theta_deg;
     theta = theta_deg * M_PI / 180.0;
     ReflectionCoef = (answer[M] - exp(zj * k0 * L * cos(theta))) / exp(-zj * k0 * L * cos(theta));
     std::cout << "R = " << ReflectionCoef << " " << abs(ReflectionCoef) << std::endl;
 
-    return 0;
+    return ReflectionCoef;
+}
+
+int main(void) {
+    for(int theta_deg = 0; theta_deg <= 90; theta_deg += 5) {
+        std::ifstream ifs("./input/input_theta" + std::to_string(theta_deg) + ".dat");
+
+        int M;
+        ifs >> M;
+
+        std::complex <double> alpha[M], beta[M], f[M];
+        double alpha_Re[M], alpha_Im[M], beta_Re[M], beta_Im[M], f_Re[M], f_Im[M], l[M];
+
+        for(int i=0; i < M; i++) {
+            ifs >> alpha_Re[i];
+            ifs >> alpha_Im[i];
+            ifs >> beta_Re[i];
+            ifs >> beta_Im[i];
+            ifs >> f_Re[i];
+            ifs >> f_Im[i];
+            ifs >> l[i];
+
+            alpha[i] = alpha_Re[i] + zj * alpha_Im[i];
+            beta[i] = beta_Re[i] + zj * beta_Im[i];
+            f[i] = f_Re[i] + zj * f_Im[i];
+        }
+
+        int boundary_type_in0, boundary_type_inL;
+        std::complex <double> p0, pL, gamma0, gammaL, q0, qL;
+
+        ifs >> boundary_type_in0;
+        if(boundary_type_in0 == 1) { //Dirichlet
+            std::cin >> p0;
+        } else if(boundary_type_in0 == 3) { //Neumann
+            std::cin >> gamma0;
+            std::cin >> q0;
+        } else {
+            std::cout << "Error!!" << std::endl;
+            exit(1);
+        }
+
+        ifs >> boundary_type_inL;
+        if(boundary_type_inL == 1) { //Dirichlet
+            std::cin >> pL;
+        } else if(boundary_type_inL == 3) { //Neumann
+            std::cin >> gammaL;
+            std::cin >> qL;
+        } else {
+            std::cout << "Error!!" << std::endl;
+            exit(1);
+        }
+
+    }
 }
